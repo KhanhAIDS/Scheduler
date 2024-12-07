@@ -2,4 +2,4 @@ Code từng class riêng rồi kết hợp lại sau. Ai làm class nào thì t�
 Để cài đặt các thư viện trong requirements.txt, chạy code trong terminal:
 pip install -r requirements.txt
 
-Chạy SeleniumInstaller.py trước để cài Selenium. Ai có solution nào gọn hơn hay tốt hơn cái đang ở main thì commit thẳng vào main luôn cũng được.
+Chạy SeleniumInstaller.py trước để cài Selenium. Ai có solution nào gọn hơn hay tốt hơn student timetable/news thì commit thẳng vào main luôn cũng được.
