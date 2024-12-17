@@ -72,25 +72,51 @@ class ConfigureDay:
         allow_reminder_var = tk.BooleanVar(value=event_obj.allow_reminder if event_obj else False)
         tk.Checkbutton(window, text="Allow Reminder", font=("Arial", 12), variable=allow_reminder_var,
                        command=lambda: toggle_reminder()).grid(row=4, column=0, columnspan=2, pady=5)
-
+        reminder_type_var = tk.StringVar(value="none")
+        # Repeat Option
+        tk.Label(window, text="Repeat:", font=("Arial", 12)).grid(row=7, column=0, padx=10, pady=5)
+        repeat_count_var = tk.StringVar(value="1")
+        repeat_unit_var = tk.StringVar(value="days")
+        repeat_frame = tk.Frame(window)
+        repeat_frame.grid(row=7, column=1, padx=10, pady=5, sticky="W")
+        repeat_count_combobox = ttk.Combobox(repeat_frame, textvariable=repeat_count_var, font=("Arial", 12),
+                                              values=[str(i) for i in range(1, 7)])
+        repeat_count_combobox.pack(side="left")
+        repeat_unit_combobox = ttk.Combobox(repeat_frame, textvariable=repeat_unit_var, font=("Arial", 12),
+                                             values=["days", "weeks", "months", "years"])
+        repeat_unit_combobox.pack(side="left")
         reminder_type_var = tk.StringVar(value="none")
         alarm_settings = {}
-
         def toggle_reminder():
             if allow_reminder_var.get():
+                # Create reminder settings
                 tk.Label(window, text="Reminder Type:", font=("Arial", 12)).grid(row=5, column=0)
-                ttk.Combobox(window, textvariable=reminder_type_var, font=("Arial", 12),
-                             values=["alarm", "notification"]).grid(row=5, column=1)
+                
+                reminder_type_box = ttk.Combobox(window, textvariable=reminder_type_var, font=("Arial", 12),
+                                                values=["alarm", "notification"])
+                reminder_type_box.grid(row=5, column=1)
 
-                if reminder_type_var.get() == "alarm":
-                    alarm_settings["file"] = filedialog.askopenfilename(title="Select Sound File")
-                    alarm_settings["repetition"] = tk.StringVar(value="1")
-                    tk.Label(window, text="Repetition:", font=("Arial", 12)).grid(row=6, column=0)
-                    ttk.Combobox(window, textvariable=alarm_settings["repetition"],
-                                 values=["1", "2", "3", "4", "5"]).grid(row=6, column=1)
+                def handle_reminder_type_change(event):
+                    if reminder_type_var.get() == "alarm":
+                        # Select sound file
+                        alarm_settings["file"] = filedialog.askopenfilename(title="Select Sound File")
+                        alarm_settings["repetition"] = tk.StringVar(value="1")
 
+                        tk.Label(window, text="Repetition:", font=("Arial", 12)).grid(row=6, column=0)
+                        ttk.Combobox(window, textvariable=alarm_settings["repetition"],
+                                    values=["1", "2", "3", "4", "5"]).grid(row=6, column=1)
+
+        # Liên kết sự kiện thay đổi giá trị
+                reminder_type_box.bind("<<ComboboxSelected>>", handle_reminder_type_change)
         # Save Event Functionality
         def save_event():
+            event_name=event_name_var.get()
+            event_type=event_type_var.get()
+            event_timeframe=timeframe_var.get()
+            if event_name == "" or event_type == "" or event_timeframe == "": 
+                messagebox.showerror("Error", "Please fill name, type and timeframe.")
+                return
+            # Give error message if input is lack of necessary information
             new_event = Event(
                 event_name=event_name_var.get(),
                 event_type=event_type_var.get(),
@@ -110,7 +136,7 @@ class ConfigureDay:
             self.event_listbox.insert(tk.END, new_event.event_name)
             window.destroy()
 
-        tk.Button(window, text="Save", font=("Arial", 12), command=save_event).grid(row=7, column=0, columnspan=2, pady=10)
+        tk.Button(window, text="Save", font=("Arial", 12), command=save_event).grid(row=8, column=0, columnspan=2, pady=10)
 
     def open_modify_event_window(self):
         """Open the event window to modify an existing event."""
@@ -119,6 +145,7 @@ class ConfigureDay:
             index = selection[0]
             event_obj = self.event_list[index]
             self.open_event_window(event_obj)
+            self.delete_event()
 
     def on_event_select(self, event):
         """Display details of the selected event."""
