@@ -3,8 +3,8 @@ from pydub import AudioSegment
 from pydub.playback import play
 import time
 import os
-
-
+from playsound import playsound
+import multiprocessing
 class Alarm:
     """
     A class to represent an alarm with sound file, repetition settings, and dismiss functionality.
@@ -42,12 +42,10 @@ class Alarm:
         self.is_dismissed = True
         print("Alarm has been dismissed.")
 
-    def play_alarm(self):
-        """Play the alarm sound file."""
-        if not os.path.exists(self.alarm_sound_file_directory):
-            print("No valid alarm sound file selected.")
-            return
-
+    def play_alarm(self, sound_path):
+        """Play the alarm sound using the provided path."""
+        print(f"Playing sound from {sound_path}")
+        playsound(sound_path)
         self.is_dismissed = False
         self.alarm_thread = threading.Thread(target=self._play_alarm_thread)
         self.alarm_thread.start()
