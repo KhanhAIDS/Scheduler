@@ -28,7 +28,7 @@ office_button.click()
 time.sleep(2.5)
 email_field_xpath = '//input[@type="email" and @name="loginfmt"]'
 email_field = wait.until(EC.presence_of_element_located((By.XPATH, email_field_xpath)))
-email_field.send_keys("Nhập email trường")  # Replace with email
+email_field.send_keys("________@sis.hust.edu.vn")  # Replace with email
 
 next_button_xpath = '//input[@type="submit" and @value="Next"]'
 next_button = wait.until(EC.element_to_be_clickable((By.XPATH, next_button_xpath)))
@@ -37,7 +37,7 @@ next_button.click()
 time.sleep(3.5)
 password_field_xpath = '//input[@type="password"]'
 password_field = wait.until(EC.presence_of_element_located((By.XPATH, password_field_xpath)))
-password_field.send_keys("Nhập password email trường")  # Replace with password
+password_field.send_keys("********")  # Replace with password
 
 sign_in_button_xpath = '//span[contains(text(), "Sign in")]'
 sign_in_button = wait.until(EC.element_to_be_clickable((By.XPATH, sign_in_button_xpath)))
