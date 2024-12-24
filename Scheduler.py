@@ -89,7 +89,7 @@ class SchedulerApp:
 
         if not events:
             no_events_label = tk.Label(self.schedule_frame, 
-                                     text="No schedule for today.\nMake sure table_data.json exists and contains data.", 
+                                     text="No schedule for today", 
                                      font=("Arial", 12), bg="lightgrey", wraplength=180)
             no_events_label.pack(pady=20)
         else:
