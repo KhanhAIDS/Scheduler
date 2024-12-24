@@ -7,14 +7,16 @@ class Calendar:
     """
     A class to display a calendar and allow interaction with specific dates.
     """
-    def __init__(self, parent_frame, on_day_click):
+    def __init__(self, parent_frame, on_day_click, timetable_manager=None):
         """
         Initialize the calendar.
         :param parent_frame: The parent Tkinter frame to contain the calendar.
         :param on_day_click: Callback function to handle day clicks.
+        :param timetable_manager: Optional timetable manager to handle events.
         """
         self.parent_frame = parent_frame
         self.on_day_click = on_day_click  # Function to handle day clicks
+        self.timetable_manager = timetable_manager
         self.current_date = datetime.date.today()
         self.calendar_frame = tk.Frame(self.parent_frame, width=600)
         self.calendar_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
@@ -44,10 +46,26 @@ class Calendar:
                     # Empty label for days outside the current month
                     tk.Label(days_frame, text="", width=5).grid(row=row + 1, column=col)
                 else:
-                    # Interactable button for valid days
-                    day_button = tk.Button(days_frame, text=str(day), width=5, font=("Arial", 12),
-                                           command=lambda d=day: self.on_day_click(self.current_date.year,
-                                                                                   self.current_date.month, d))
+                    # Check if there are events for this day
+                    date_str = f"{self.current_date.year}-{self.current_date.month:02d}-{day:02d}"
+                    has_events = False
+                    if self.timetable_manager:
+                        events = self.timetable_manager.get_events_for_date(date_str)
+                        has_events = len(events) > 0
+
+                    # Create button with different background if there are events
+                    day_button = tk.Button(
+                        days_frame, 
+                        text=str(day), 
+                        width=5, 
+                        font=("Arial", 12),
+                        bg="lightblue" if has_events else "white",  # Highlight days with events
+                        command=lambda d=day: self.on_day_click(
+                            self.current_date.year,
+                            self.current_date.month, 
+                            d
+                        )
+                    )
                     day_button.grid(row=row + 1, column=col)
 
         # Navigation buttons for the calendar
