@@ -5,3 +5,5 @@ Code từng class riêng rồi kết hợp lại sau. Ai làm class nào thì t�
 pip install -r requirements.txt
 
 Chạy SeleniumInstaller.py trước để cài Selenium. Ai có solution nào gọn hơn hay tốt hơn student timetable/news thì commit thẳng vào main luôn cũng được.
+
+Update: đã thêm timetable (hhiep)
