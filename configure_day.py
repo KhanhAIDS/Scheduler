@@ -153,17 +153,20 @@ class ConfigureDay:
         if selection:
             index = selection[0]
             event_obj = self.event_list[index]
-            details = (
-                f"Name: {event_obj.event_name}\n"
-                f"Type: {event_obj.event_type}\n"
-                f"Timeframe: {event_obj.event_timeframe}\n"
-                f"Note: {event_obj.event_note}\n"
-                f"Reminder: {'Enabled' if event_obj.allow_reminder else 'Disabled'}"
-            )
-            self.details_text.config(state="normal")
-            self.details_text.delete("1.0", tk.END)
-            self.details_text.insert(tk.END, details)
-            self.details_text.config(state="disabled")
+            self.display_event_details(event_obj)
+
+    def display_event_details(self, event_obj):
+        """Display details of an event."""
+        details = (
+            f"Name: {event_obj.event_name}\n"
+            f"Type: {event_obj.event_type}\n"
+            f"Time: {event_obj.event_timeframe.split(' ')[1]}\n"  # Show only time part
+            f"Note: {event_obj.event_note}"
+        )
+        self.details_text.config(state="normal")
+        self.details_text.delete("1.0", tk.END)
+        self.details_text.insert(tk.END, details)
+        self.details_text.config(state="disabled")
 
     def delete_event(self):
         """Delete the selected event."""
